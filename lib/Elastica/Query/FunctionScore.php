@@ -269,15 +269,21 @@ class FunctionScore extends AbstractQuery
     /**
      * If set, this query will return results in random order.
      *
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html#function-random
      * @param int $seed set a seed value to return results in the same random order for consistent pagination
      *
      * @return $this
      */
-    public function setRandomScore(int $seed = null): self
+    public function setRandomScore($seed = null, $field = '')
     {
         $seedParam = new \stdClass();
-        if (null !== $seed) {
+        if (!is_null($seed)) {
             $seedParam->seed = $seed;
+
+            // Option Assignment field
+            if (!empty($field)) {
+                $seedParam->field = $field;
+            }
         }
 
         return $this->setParam('random_score', $seedParam);
